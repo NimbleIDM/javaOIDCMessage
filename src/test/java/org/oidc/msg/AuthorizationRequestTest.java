@@ -22,22 +22,6 @@ public class AuthorizationRequestTest {
     Assert.assertEquals("value", req.getClaims().get("client_id"));
   }
 
-  @SuppressWarnings("unchecked")
-  @Test
-  public void testSuccessMandatoryAndAdditionalParameters() throws InvalidClaimException {
-    Map<String, Object> claims = new HashMap<String, Object>();
-    List<String> responseType = new ArrayList<String>();
-    responseType.add("code");
-    claims.put("response_type", responseType);
-    claims.put("client_id", "value");
-    claims.put("additional", "value");
-    AuthorizationRequest req = new AuthorizationRequest(claims);
-    Assert.assertEquals("code", ((List<String>) req.getClaims().get("response_type")).get(0));
-    Assert.assertEquals("value", req.getClaims().get("client_id"));
-    Assert.assertEquals("value", req.getClaims().get("additional"));
-
-  }
-
   @Test(expected = InvalidClaimException.class)
   public void testFailureMissingResponseTypeMandatoryParameter() throws InvalidClaimException {
     Map<String, Object> claims = new HashMap<String, Object>();
