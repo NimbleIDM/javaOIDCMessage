@@ -9,14 +9,13 @@ import org.junit.Test;
 
 public class AuthorizationRequestTest {
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testSuccessMandatoryParameters() throws InvalidClaimException {
-    
+
     Map<String, Object> claims = new HashMap<String, Object>();
     String[] responseType = new String[2];
-    responseType[0]="id_token";
-    responseType[1]="token";
+    responseType[0] = "id_token";
+    responseType[1] = "token";
     claims.put("response_type", responseType);
     claims.put("client_id", "value");
     AuthorizationRequest req = new AuthorizationRequest(claims);

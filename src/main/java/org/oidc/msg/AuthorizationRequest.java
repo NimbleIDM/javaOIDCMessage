@@ -1,8 +1,6 @@
 package org.oidc.msg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,12 +9,7 @@ import java.util.Map;
  * https://tools.ietf.org/html/rfc6749#section-4.2.
  */
 public class AuthorizationRequest extends AbstractMessage {
-
-  /**
-   * Required claims that need to be set.
-   */
-  //protected final List<String> requiredClaims = new ArrayList<String>();
-
+ 
   /**
    * Parameter requirements.
    */
@@ -41,25 +34,6 @@ public class AuthorizationRequest extends AbstractMessage {
    */
   public AuthorizationRequest(Map<String, Object> claims) {
     super(claims);
-    //requiredClaims.add("response_type");
-    //requiredClaims.add("client_id");
-  }
-
-  /*
-  @Override
-  protected List<String> getRequiredClaims() {
-    return requiredClaims;
-  }
-
-  @Override
-  public MessageType fetchMessageType() {
-    return MessageType.AUTHORIZATION_REQUEST;
-  }
-  */
-
-  @Override
-  public boolean allowCustomClaims() {
-    return true;
   }
 
   @Override

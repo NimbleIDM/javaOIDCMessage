@@ -1,6 +1,5 @@
 package org.oidc.msg;
 
-import java.util.List;
 import java.util.Map;
 
 public class RegistrationResponse extends AbstractMessage {
@@ -9,33 +8,13 @@ public class RegistrationResponse extends AbstractMessage {
     super(claims);
   }
 
-  /*
-  @Override
-  protected List<String> getRequiredClaims() {
-    return null;
-  }
-  */
-
   @Override
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return null;
   }
 
-  /*
-  @Override
-  public MessageType fetchMessageType() {
-    return MessageType.REGISTRATION_RESPONSE;
-  }
-  */
-
-  @Override
-  public boolean allowCustomClaims() {
-    return false;
-  }
-
   @Override
   Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
-    // TODO Auto-generated method stub
     return null;
   }
 }

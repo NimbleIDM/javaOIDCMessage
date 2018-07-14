@@ -27,6 +27,9 @@ public class AbstractMessageTest {
   private JsonGenerator jsonGenerator;
   private SerializerProvider serializerProvider;
 
+  
+  //TODO: Old tests start here. go through them and make sense out of them.
+  
   @Before
   public void setUp() throws Exception {
     writer = new StringWriter();
@@ -69,6 +72,8 @@ public class AbstractMessageTest {
     Assert.assertEquals(pcr.getClaims(), claims);
   }
 
+  // New tests ->
+  
   @Test(expected = InvalidClaimException.class)
   public void failureMissingRequiredParam() throws InvalidClaimException {
     HashMap<String, Object> claims = new HashMap<>();
@@ -338,30 +343,11 @@ public class AbstractMessageTest {
         Map<String, ParameterVerificationDefinition> parameterVerificationDefinitions) {
       this.parameterVerificationDefinitions = parameterVerificationDefinitions;
     }
-
-    @Override
-    public boolean allowCustomClaims() {
-      return false;
-    }
-
-    /*
-    @Override
-    protected List<String> getRequiredClaims() {
-      return null;
-    }
-    */
-
+    
     @Override
     Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
       return parameterVerificationDefinitions;
     }
-
-    /*
-    @Override
-    protected MessageType fetchMessageType() {
-      return null;
-    }
-    */
 
   }
 }

@@ -18,7 +18,7 @@ public interface Message {
    * @return a JSON String representation of the message
    * @throws SerializationException
    */
-  String toJson() throws SerializationException, JsonProcessingException;
+  String toJson() throws SerializationException, JsonProcessingException, InvalidClaimException;
 
   /**
    * Serialize the content of the claims map into an UrlEncoded string
@@ -26,7 +26,7 @@ public interface Message {
    * @return a urlEncoded string
    * @throws SerializationException
    */
-  String toUrlEncoded() throws SerializationException, JsonProcessingException;
+  String toUrlEncoded() throws SerializationException, JsonProcessingException, InvalidClaimException;
 
   /**
    * Serialize the content of this instance (the claims map) into a jwt string
@@ -38,7 +38,7 @@ public interface Message {
    * @return a jwt String
    * @throws InvalidClaimException
    */
-  String toJwt(Algorithm algorithm) throws SerializationException, JsonProcessingException;
+  String toJwt(Algorithm algorithm) throws SerializationException, JsonProcessingException, InvalidClaimException;
 
   /**
    * Logic to extract from the string the values
