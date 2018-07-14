@@ -11,23 +11,33 @@ public class WebfingerRequestMessage extends AbstractMessage {
     super(claims);
   }
 
+  /*
   @Override
   protected List<String> getRequiredClaims() {
     return null;
   }
+  */
 
   @Override
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return super.getClaims();
   }
 
+  /*
   @Override
   public MessageType fetchMessageType() {
     return MessageType.WEBFINGER_REQUEST_MESSAGE;
   }
+  */
 
   @Override
   public boolean allowCustomClaims() {
     return false;
+  }
+
+  @Override
+  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

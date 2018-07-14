@@ -1,6 +1,7 @@
 package org.oidc.msg;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,22 @@ public class AuthorizationRequest extends AbstractMessage {
   /**
    * Required claims that need to be set.
    */
-  protected final List<String> requiredClaims = new ArrayList<String>();
+  //protected final List<String> requiredClaims = new ArrayList<String>();
+
+  /**
+   * Parameter requirements.
+   */
+  protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
+      new HashMap<String, ParameterVerificationDefinition>();
+
+  { //Set parameter requirements for message.
+    paramVerDefs.put("response_type",
+        ParameterVerification.REQUIRED_LIST_OF_SP_SEP_STRINGS.getValue());
+    paramVerDefs.put("client_id", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
+    paramVerDefs.put("redirect_uri", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    paramVerDefs.put("scope", ParameterVerification.OPTIONAL_LIST_OF_SP_SEP_STRINGS.getValue());
+    paramVerDefs.put("state", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+  }
 
   /**
    * Constructor.
@@ -25,10 +41,11 @@ public class AuthorizationRequest extends AbstractMessage {
    */
   public AuthorizationRequest(Map<String, Object> claims) {
     super(claims);
-    requiredClaims.add("response_type");
-    requiredClaims.add("client_id");
+    //requiredClaims.add("response_type");
+    //requiredClaims.add("client_id");
   }
 
+  /*
   @Override
   protected List<String> getRequiredClaims() {
     return requiredClaims;
@@ -38,9 +55,15 @@ public class AuthorizationRequest extends AbstractMessage {
   public MessageType fetchMessageType() {
     return MessageType.AUTHORIZATION_REQUEST;
   }
+  */
 
   @Override
   public boolean allowCustomClaims() {
     return true;
+  }
+
+  @Override
+  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
+    return paramVerDefs;
   }
 }

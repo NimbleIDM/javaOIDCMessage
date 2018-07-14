@@ -9,23 +9,33 @@ public class RegistrationRequest extends AbstractMessage {
     super(claims);
   }
 
+  /*
   @Override
   protected List<String> getRequiredClaims() {
     return null;
   }
+  */
 
   @Override
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return null;
   }
 
+  /*
   @Override
   public MessageType fetchMessageType() {
     return MessageType.REGISTRATION_REQUEST;
   }
+  */
 
   @Override
   public boolean allowCustomClaims() {
     return false;
+  }
+
+  @Override
+  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

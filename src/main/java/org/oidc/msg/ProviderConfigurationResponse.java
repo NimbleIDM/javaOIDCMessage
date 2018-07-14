@@ -12,23 +12,33 @@ public class ProviderConfigurationResponse extends AbstractMessage {
     super(claims);
   }
 
+  /*
   @Override
   protected List<String> getRequiredClaims() {
     return null;
   }
+  */
 
   @Override
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return super.getClaims();
   }
 
+  /*
   @Override
   public MessageType fetchMessageType() {
     return MessageType.PROVIDER_CONFIGURATION_RESPONSE;
   }
+  */
 
   @Override
   public boolean allowCustomClaims() {
     return true;
+  }
+
+  @Override
+  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

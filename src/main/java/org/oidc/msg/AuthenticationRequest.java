@@ -9,6 +9,11 @@ import java.util.Map;
  */
 public class AuthenticationRequest extends AuthorizationRequest {
 
+  { //Updating AuthorizationRequest parameter requirements.
+    paramVerDefs.put("redirect_uri", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
+    paramVerDefs.put("scope", ParameterVerification.REQUIRED_LIST_OF_SP_SEP_STRINGS.getValue());
+  }
+  
   /**
    * Constructor.
    * 
@@ -23,6 +28,7 @@ public class AuthenticationRequest extends AuthorizationRequest {
   @SuppressWarnings("unchecked")
   public AuthenticationRequest(Map<String, Object> claims) throws InvalidClaimException {
     super(claims);
+    /*
     requiredClaims.add("redirect_uri");
     requiredClaims.add("scope");
     // verify response type claim individually as it needs to be used.
@@ -31,7 +37,9 @@ public class AuthenticationRequest extends AuthorizationRequest {
     if (((List<String>) claims.get("response_type")).contains("id_token")
         && !((List<String>) claims.get("response_type")).contains("code")) {
       requiredClaims.add("nonce");
+    
     }
+    */
   }
 
 }

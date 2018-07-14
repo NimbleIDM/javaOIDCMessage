@@ -13,6 +13,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -155,11 +156,131 @@ public abstract class AbstractMessage implements Message {
     return newBuilder.sign(algorithm);
   }
 
+  @SuppressWarnings("rawtypes")
+  protected boolean verify() throws InvalidClaimException {
+    Map<String, ParameterVerificationDefinition> paramVerDefs = 
+        getParameterVerificationDefinitions();
+    if (paramVerDefs == null || paramVerDefs.isEmpty()) {
+      return true;
+    }
+    for (String paramName : paramVerDefs.keySet()) {
+      // If parameter is defined as REQUIRED, it must exist.
+      if (paramVerDefs.get(paramName).isRequired() && (!claims.containsKey(paramName)
+          || claims.get(paramName) == null)) {
+        throw new InvalidClaimException(
+            String.format("Required parameter '%s' is missing", paramName));
+      }
+      Object value = claims.get(paramName);
+      if (value == null) {
+        continue;
+      }
+      // If parameter exists, we verify the type of it and possibly transform it.
+      switch (paramVerDefs.get(paramName).getParameterType()) {
+      
+        // TODO: There seems not to be equivalent in python(remove?), 
+        // missing still ParameterVerification field and tests.
+        case BOOLEAN:
+          if (!(value instanceof Boolean)) {
+            throw new InvalidClaimException(
+                String.format("Parameter '%s' is not of expected type", paramName));
+          }
+          break;
+          
+        case STRING:
+          if (!(value instanceof String)) {
+            throw new InvalidClaimException(
+                String.format("Parameter '%s' is not of expected type", paramName));
+          }
+          break;
+          
+        case INT:
+          if (value instanceof Long) {
+            break;
+          } // convert Integer to Long.
+          if (value instanceof Integer) {
+            claims.put(paramName, ((Integer)value).longValue());
+            break;
+          } // convert String to Long if possible and update the value.
+          if (value instanceof String) {
+            try {
+              long longValue = Long.parseLong((String) value);
+              claims.put(paramName, longValue);
+              break;
+            } catch (NumberFormatException e) {
+              //We throw the exception at the end of case.
+            }
+          }
+          throw new InvalidClaimException(
+              String.format("Parameter '%s' is not of expected type", paramName));
+
+        // TODO: There seems not to be equivalent in python(remove?), 
+        // missing still ParameterVerification field and tests.
+        case DATE:
+          if (value instanceof Date) {
+            break;
+          } //Convert Integer and Long to Date if possible.
+          if (value instanceof Integer || value instanceof Long) {
+            long epoch;
+            if (value instanceof Integer) {
+              epoch = ((Integer) value).longValue();
+            } else {
+              epoch = (Long) value;
+            }
+            claims.put(paramName, new Date(epoch));
+            break;
+          }
+          throw new InvalidClaimException(
+              String.format("Parameter '%s' is not of expected type", paramName));
+          
+        case LIST:
+          if ((value instanceof List) && (((List) value).get(0) instanceof String)) {
+            break;
+          } //If there is String we set it to list
+          if (value instanceof String) {
+            List<String> listParam = new ArrayList<String>();
+            listParam.add((String) value);
+            claims.put(paramName, listParam);
+            break;
+          }
+          throw new InvalidClaimException(
+              String.format("Parameter '%s' is not of expected type", paramName));
+          
+        case ARRAY:
+          if (value instanceof String) {
+            break;
+          }
+          if (!(value instanceof String[]) || ((String[]) value).length == 0) {
+            throw new InvalidClaimException(
+                String.format("The claim '%s' type is not appropriate for this claim'", paramName));
+          }
+          String spaceSeparatedString = "";
+          for (String item : (String[]) value) {
+            spaceSeparatedString += spaceSeparatedString.length() > 0 ? " " + item : item;
+          }
+          claims.put(paramName, spaceSeparatedString);
+          break;
+          
+        case ID_TOKEN:
+          if (!(value instanceof IDToken)) {
+            throw new InvalidClaimException(
+                String.format("The claim '%s' type is not appropriate for this claim'", paramName));
+          }
+          return ((IDToken) value).verify();
+     
+        default:
+          break;
+      }
+      
+    }
+    return true;
+  }
+  
   /**
    * verify that the required claims are present
    * 
    * @return whether the verification passed
    */
+  /*
   protected boolean verify() throws InvalidClaimException {
     // This method will set error if verification fails
     List<String> errorMessages = new ArrayList<String>();
@@ -210,6 +331,7 @@ public abstract class AbstractMessage implements Message {
     }
     return false;
   }
+  */
 
   /**
    * @return Boolean whether this message subclass allows for custom claims
@@ -234,9 +356,11 @@ public abstract class AbstractMessage implements Message {
   /**
    * @return List of the list of standard optional claims for this messsage type
    */
+  /*
   protected List<String> getOptionalClaims() {
     return Collections.emptyList();
   }
+  */
 
   /**
    * add the claim to this instance of message
@@ -253,7 +377,7 @@ public abstract class AbstractMessage implements Message {
   /**
    * @return List of the list of standard required claims for this messsage type
    */
-  abstract protected List<String> getRequiredClaims();
+  //abstract protected List<String> getRequiredClaims();
 
   protected void reset() {
     this.input = null;
@@ -261,11 +385,18 @@ public abstract class AbstractMessage implements Message {
     this.error = null;
     this.verified = false;
   }
+  
+  /**
+   * Get parameter verification definitions.
+   * 
+   * @return parameter verification definitions
+   */
+  abstract Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions();
 
   /**
    * @return enum Name of the message subtype
    */
-  abstract protected MessageType fetchMessageType();
+  //abstract protected MessageType fetchMessageType();
 
   /**
    * @return boolean for whether there is an error in verification
