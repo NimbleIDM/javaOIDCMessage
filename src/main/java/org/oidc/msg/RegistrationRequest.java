@@ -12,9 +12,4 @@ public class RegistrationRequest extends AbstractMessage {
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return null;
   }
-
-  @Override
-  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
-    return null;
-  }
 }

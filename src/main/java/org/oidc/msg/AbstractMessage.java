@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
@@ -32,6 +33,9 @@ public abstract class AbstractMessage implements Message {
   private ObjectMapper mapper = new ObjectMapper();
   /** Whether the message has been verified. */
   private boolean verified;
+  /** Parameter requirements. */
+  protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
+      new HashMap<String, ParameterVerificationDefinition>();
 
   /**
    * Constructor.
@@ -348,7 +352,9 @@ public abstract class AbstractMessage implements Message {
    * 
    * @return parameter verification definitions
    */
-  abstract Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions();
+  public Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
+    return this.paramVerDefs;
+  }
 
   /**
    * Whether there is an error in verification.

@@ -14,9 +14,4 @@ public class IDToken extends AbstractMessage {
   public Map<String, Object> getClaims() throws InvalidClaimException {
     return super.getClaims();
   }
-
-  @Override
-  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
-    return null;
-  }
 }

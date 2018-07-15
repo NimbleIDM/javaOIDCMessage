@@ -10,12 +10,6 @@ import java.util.Map;
  */
 public class AuthorizationRequest extends AbstractMessage {
  
-  /**
-   * Parameter requirements.
-   */
-  protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
-      new HashMap<String, ParameterVerificationDefinition>();
-
   { //Set parameter requirements for message.
     paramVerDefs.put("response_type",
         ParameterVerification.REQUIRED_LIST_OF_SP_SEP_STRINGS.getValue());
@@ -34,10 +28,5 @@ public class AuthorizationRequest extends AbstractMessage {
    */
   public AuthorizationRequest(Map<String, Object> claims) {
     super(claims);
-  }
-
-  @Override
-  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
-    return paramVerDefs;
   }
 }

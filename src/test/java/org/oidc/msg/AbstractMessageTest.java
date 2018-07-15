@@ -78,11 +78,10 @@ public class AbstractMessageTest {
   public void failureMissingRequiredParam() throws InvalidClaimException {
     HashMap<String, Object> claims = new HashMap<>();
     claims.put("parameter1", "value");
-    Map<String, ParameterVerificationDefinition> pVerDef = 
+    Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
-    pVerDef.put("parameter2", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(pVerDef);
+    parVerDef.put("parameter2", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"value");
   }
 
@@ -96,8 +95,7 @@ public class AbstractMessageTest {
     parVerDef.put("parameter3", ParameterVerification.SINGLE_OPTIONAL_INT.getValue());
     parVerDef.put("parameter4", ParameterVerification.OPTIONAL_LIST_OF_SP_SEP_STRINGS.getValue());
     parVerDef.put("parameter5", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"value");
   }
   
@@ -109,8 +107,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"value");
     Assert.assertEquals(mockMessage.toJson(), "{\"parameter1\":\"value\"}");
   }
@@ -122,8 +119,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     mockMessage.triggerVerify();
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),1);
   }
@@ -136,8 +132,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_INT.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"), 5L);
     Assert.assertEquals(mockMessage.toJson(), "{\"parameter1\":5}");
   }
@@ -150,8 +145,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_INT.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"), 5L);
     Assert.assertEquals(mockMessage.toJson(), "{\"parameter1\":5}");
   }
@@ -164,8 +158,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_INT.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"), 57L);
     Assert.assertEquals(mockMessage.toJson(), "{\"parameter1\":57}");
   }
@@ -177,8 +170,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_INT.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"fail");
   }
   
@@ -194,8 +186,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(0), "value");
     Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(1),
         "value2");
@@ -211,8 +202,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(0),
         "values");
     Assert.assertThat(mockMessage.toJson(), is("{\"parameter1\":[\"values\"]}"));
@@ -228,8 +218,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(0),"values");
   }
   
@@ -244,8 +233,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.REQUIRED_LIST_OF_SP_SEP_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"), "value value2");
     Assert.assertThat(mockMessage.toJson(), is("{\"parameter1\":\"value value2\"}"));
   }
@@ -257,8 +245,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.REQUIRED_LIST_OF_SP_SEP_STRINGS.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((String[])mockMessage.getClaims().get("parameter1"))[0],"value");
   }
   
@@ -269,8 +256,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_BOOLEAN.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),true);
   }
   
@@ -281,8 +267,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_BOOLEAN.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"value");
   }
   
@@ -294,8 +279,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_DATE.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((Date)mockMessage.getClaims().get("parameter1")).getTime(), 
         date.getTime());
   }
@@ -308,8 +292,7 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
         new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_DATE.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     Assert.assertEquals(((Date)mockMessage.getClaims().get("parameter1")).getTime(), 
         date.getTime());
   }
@@ -321,33 +304,23 @@ public class AbstractMessageTest {
     Map<String, ParameterVerificationDefinition> parVerDef = 
          new HashMap<String, ParameterVerificationDefinition>();
     parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_DATE.getValue());
-    MockMessage mockMessage = new MockMessage(claims);
-    mockMessage.setParameterVerificationDefinitions(parVerDef);
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
     mockMessage.triggerVerify();
     Assert.assertEquals(mockMessage.getClaims().get("parameter1"),"value");
   }
 
   class MockMessage extends AbstractMessage {
 
-    MockMessage(HashMap<String, Object> claims) {
+    MockMessage(HashMap<String, Object> claims,
+        Map<String, ParameterVerificationDefinition> parVerDef) {
       super(claims);
+      for (String key : parVerDef.keySet()) {
+        this.paramVerDefs.put(key, parVerDef.get(key));
+      }
     }
 
     public void triggerVerify() throws InvalidClaimException {
       verify();
     }
-
-    Map<String, ParameterVerificationDefinition> parameterVerificationDefinitions;
-
-    public void setParameterVerificationDefinitions(
-        Map<String, ParameterVerificationDefinition> parameterVerificationDefinitions) {
-      this.parameterVerificationDefinitions = parameterVerificationDefinitions;
-    }
-    
-    @Override
-    Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions() {
-      return parameterVerificationDefinitions;
-    }
-
   }
 }
