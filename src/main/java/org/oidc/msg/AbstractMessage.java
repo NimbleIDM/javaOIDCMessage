@@ -193,6 +193,7 @@ public abstract class AbstractMessage implements Message {
     Map<String, ParameterVerificationDefinition> paramVerDefs = 
         getParameterVerificationDefinitions();
     if (paramVerDefs == null || paramVerDefs.isEmpty()) {
+      verified = true;
       return true;
     }
     for (String paramName : paramVerDefs.keySet()) {
@@ -293,6 +294,7 @@ public abstract class AbstractMessage implements Message {
                 String.format("The claim '%s' type is not appropriate for this claim'", paramName));
             break;
           }
+          verified = ((IDToken) value).verify();
           return ((IDToken) value).verify();
   
         default:
@@ -304,6 +306,7 @@ public abstract class AbstractMessage implements Message {
       throw new InvalidClaimException(
           "Message parameter verification failed. See Error object for details");
     }
+    verified = true;
     return true;
   }
 
