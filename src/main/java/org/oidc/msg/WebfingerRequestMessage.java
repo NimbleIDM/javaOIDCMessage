@@ -11,14 +11,10 @@ public class WebfingerRequestMessage extends AbstractMessage {
   }
   
   public WebfingerRequestMessage() {
+    super();
   }
 
   public WebfingerRequestMessage(Map<String, Object> claims) {
     super(claims);
-  }
-
-  @Override
-  public Map<String, Object> getClaims() throws InvalidClaimException {
-    return super.getClaims();
   }
 }
