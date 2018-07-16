@@ -3,6 +3,11 @@ package org.oidc.msg;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * One of the attributes of JSON Resource Description (JRD) Contains these attributes: rel, type,
+ * href, titles, and properties For more info, please see:
+ * https://tools.ietf.org/html/rfc7033#section-4.4.4
+ */
 public class Link extends AbstractMessage {
 
   { //Set parameter requirements for message.
