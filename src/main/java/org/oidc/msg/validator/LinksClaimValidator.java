@@ -16,8 +16,16 @@ public class LinksClaimValidator implements ClaimValidator {
       List<Link> links = new ArrayList<Link>();
       MapClaimValidator mapValidator = new MapClaimValidator();
       for (Object item : list) {
-        Map<String, Object> claims = (Map<String, Object>) mapValidator.validate(item);
-        Link link = new Link(claims);
+        Link link;
+        if (item instanceof Map) {
+          Map<String, Object> claims = (Map<String, Object>) mapValidator.validate(item);
+          link = new Link(claims);
+        } else if (item instanceof Link) {
+          link = (Link) item;
+        } else {
+          throw new InvalidClaimException(
+              String.format("Parameter '%s' is not of expected type", value));
+        }
         // TODO: this is just for initiating verify()
         link.getClaims();
         links.add(link);
