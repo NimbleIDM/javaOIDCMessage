@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -113,7 +115,10 @@ public abstract class AbstractMessage implements Message {
     if (!verified) {
       verify();
     }
-    String jsonMsg = mapper.writeValueAsString(claims);
+    SimpleModule module = new SimpleModule();
+    module.addSerializer(AbstractMessage.class, new MessageSerializer());
+    mapper.registerModule(module);
+    String jsonMsg = mapper.writeValueAsString(this);
     return jsonMsg;
   }
 
@@ -324,4 +329,5 @@ public abstract class AbstractMessage implements Message {
     // Override to return user friendly value
     return super.toString();
   }
+
 }
