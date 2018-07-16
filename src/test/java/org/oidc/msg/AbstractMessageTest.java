@@ -14,6 +14,7 @@ import org.junit.Assert;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,9 +44,9 @@ public class AbstractMessageTest {
   @Test
   public void testToUrlEncoded() throws Exception {
     HashMap<String, Object> claims = new HashMap<>();
-    claims.put("GRAND_TYPE", "refresh_token");
+    claims.put("GRANT_TYPE", "refresh_token");
 
-    ProviderConfigurationResponse pcr = new ProviderConfigurationResponse(claims);
+    MockMessage pcr = new MockMessage(claims);
     String pcrUrlEncoded = pcr.toUrlEncoded();
   }
 
@@ -54,7 +55,7 @@ public class AbstractMessageTest {
     HashMap<String, Object> claims = new HashMap<>();
     claims.put("GRANT_TYPE", "refresh_token");
 
-    ProviderConfigurationResponse pcr = new ProviderConfigurationResponse(claims);
+    MockMessage pcr = new MockMessage(claims);
     String pcrJson = pcr.toJson();
     String testJson = "{\"GRANT_TYPE\":\"refresh_token\"}";
     Assert.assertThat(pcrJson, is(testJson));
@@ -65,7 +66,7 @@ public class AbstractMessageTest {
     HashMap<String, Object> claims = new HashMap<>();
     claims.put("GRANT_TYPE", "refresh_token");
     String testJson = "{\"GRANT_TYPE\":\"refresh_token\"}";
-    ProviderConfigurationResponse pcr = new ProviderConfigurationResponse(claims);
+    MockMessage pcr = new MockMessage(claims);
     pcr.fromJson(testJson);
     Map<String, Object> claims2 = pcr.getClaims();
 
@@ -195,6 +196,44 @@ public class AbstractMessageTest {
   
   @SuppressWarnings("unchecked")
   @Test
+  public void successTestListTypeAllowed()
+      throws InvalidClaimException, JsonProcessingException, SerializationException {
+    HashMap<String, Object> claims = new HashMap<>();
+    List<String> values = new ArrayList<String>();
+    values.add("value");
+    values.add("value2");
+    claims.put("parameter1", values);
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
+    Map<String, List<?>> allowedValues = new HashMap<String, List<?>>();
+    allowedValues.put("parameter1", Arrays.asList("value", "value2", "evenMore"));
+    MockMessage mockMessage = new MockMessage(claims, parVerDef, allowedValues);
+    Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(0), "value");
+    Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(1),
+        "value2");
+    Assert.assertThat(mockMessage.toJson(), is("{\"parameter1\":[\"value\",\"value2\"]}"));
+  }
+  
+  @Test(expected = InvalidClaimException.class)
+  public void failedTestListTypeNotAllAllowed()
+      throws InvalidClaimException, JsonProcessingException, SerializationException {
+    HashMap<String, Object> claims = new HashMap<>();
+    List<String> values = new ArrayList<String>();
+    values.add("value");
+    values.add("value2");
+    claims.put("parameter1", values);
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
+    Map<String, List<?>> allowedValues = new HashMap<String, List<?>>();
+    allowedValues.put("parameter1", Arrays.asList("value", "evenMore"));
+    MockMessage mockMessage = new MockMessage(claims, parVerDef, allowedValues);
+    mockMessage.triggerVerify();
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
   public void successTestListTypeConversion()
       throws InvalidClaimException, JsonProcessingException, SerializationException {
     HashMap<String, Object> claims = new HashMap<>();
@@ -208,6 +247,37 @@ public class AbstractMessageTest {
     Assert.assertThat(mockMessage.toJson(), is("{\"parameter1\":[\"values\"]}"));
   }
 
+  @SuppressWarnings("unchecked")
+  @Test
+  public void successTestListTypeConversionAllowed()
+      throws InvalidClaimException, JsonProcessingException, SerializationException {
+    HashMap<String, Object> claims = new HashMap<>();
+    claims.put("parameter1", "values");
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
+    Map<String, List<?>> allowedValues = new HashMap<String, List<?>>();
+    allowedValues.put("parameter1", Arrays.asList("values"));
+    MockMessage mockMessage = new MockMessage(claims, parVerDef, allowedValues);
+    Assert.assertEquals(((List<String>) mockMessage.getClaims().get("parameter1")).get(0),
+        "values");
+    Assert.assertThat(mockMessage.toJson(), is("{\"parameter1\":[\"values\"]}"));
+  }
+  
+  @Test(expected = InvalidClaimException.class)
+  public void failedTestListTypeConversionNotAllowed()
+      throws InvalidClaimException, JsonProcessingException, SerializationException {
+    HashMap<String, Object> claims = new HashMap<>();
+    claims.put("parameter1", "values");
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
+    Map<String, List<?>> allowedValues = new HashMap<String, List<?>>();
+    allowedValues.put("parameter1", Arrays.asList("notValues"));
+    MockMessage mockMessage = new MockMessage(claims, parVerDef, allowedValues);
+    mockMessage.triggerVerify();
+  }
+  
   @SuppressWarnings("unchecked")
   @Test(expected = InvalidClaimException.class)
   public void failTestListType() throws InvalidClaimException {
@@ -310,14 +380,28 @@ public class AbstractMessageTest {
   }
 
   class MockMessage extends AbstractMessage {
+    
+    MockMessage(HashMap<String, Object> claims) {
+      this(claims, new HashMap<String, ParameterVerificationDefinition>());
+    }
 
     MockMessage(HashMap<String, Object> claims,
         Map<String, ParameterVerificationDefinition> parVerDef) {
+      this(claims, parVerDef, new HashMap<String, List<?>>());
+    }
+    
+    MockMessage(HashMap<String, Object> claims,
+        Map<String, ParameterVerificationDefinition> parVerDef,
+        Map<String, List<?>> allowedValues) {
       super(claims);
       for (String key : parVerDef.keySet()) {
         this.paramVerDefs.put(key, parVerDef.get(key));
       }
+      for (String key : allowedValues.keySet()) {
+        this.allowedValues.put(key, allowedValues.get(key));
+      }
     }
+    
 
     public void triggerVerify() throws InvalidClaimException {
       verify();
