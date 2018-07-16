@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,13 +34,10 @@ public abstract class AbstractMessage implements Message {
   /** Parameter requirements. */
   protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
       new HashMap<String, ParameterVerificationDefinition>();
-
-  /**
-   * Constructor.
-   */
-  protected AbstractMessage() {
-    this(Collections.<String, Object>emptyMap());
-  }
+  /** Default values for desired parameters. */
+  protected final Map<String, Object> defaultValues = new HashMap<String, Object>();
+  /** Allowed values for desired parameters. */
+  protected final Map<String, List<?>> allowedValues = new HashMap<String, List<?>>();
 
   /**
    * Constructor.
@@ -50,7 +45,7 @@ public abstract class AbstractMessage implements Message {
    * @param claims
    *          message parameters
    */
-  protected AbstractMessage(Map<String, Object> claims) {
+  public AbstractMessage(Map<String, Object> claims) {
     this.claims = claims;
   }
 
@@ -182,6 +177,17 @@ public abstract class AbstractMessage implements Message {
     }
     return newBuilder.sign(algorithm);
   }
+  
+  /**
+   * Adds default values to the claims which are not yet set.
+   */
+  protected void addDefaultValues() {
+    for (String key : defaultValues.keySet()) {
+      if (!this.claims.containsKey(key)) {
+        this.claims.put(key, defaultValues.get(key));
+      }
+    }
+  }
 
   /**
    * Verifies the presence of required message parameters. Verifies the the format of message
@@ -191,9 +197,9 @@ public abstract class AbstractMessage implements Message {
    * @throws InvalidClaimException
    *           if verification fails.
    */
-  @SuppressWarnings("rawtypes")
   protected boolean verify() throws InvalidClaimException {
     error.getMessages().clear();
+
     Map<String, ParameterVerificationDefinition> paramVerDefs = 
         getParameterVerificationDefinitions();
     if (paramVerDefs == null || paramVerDefs.isEmpty()) {
@@ -211,100 +217,45 @@ public abstract class AbstractMessage implements Message {
         continue;
       }
       // If parameter exists, we verify the type of it and possibly transform it.
-      switch (paramVerDefs.get(paramName).getParameterType()) {
-        case BOOLEAN:
-          if (!(value instanceof Boolean)) {
-            error.getMessages()
-                .add(String.format("Parameter '%s' is not of expected type", paramName));
-          }
-          break;
-  
-        case STRING:
-          if (!(value instanceof String)) {
-            error.getMessages()
-                .add(String.format("Parameter '%s' is not of expected type", paramName));
-          }
-          break;
-  
-        case INT:
-          if (value instanceof Long) {
-            break;
-          } // convert Integer to Long.
-          if (value instanceof Integer) {
-            claims.put(paramName, ((Integer) value).longValue());
-            break;
-          } // convert String to Long if possible and update the value.
-          if (value instanceof String) {
-            try {
-              long longValue = Long.parseLong((String) value);
-              claims.put(paramName, longValue);
-              break;
-            } catch (NumberFormatException e) {
-              // We mark the error in the end of case.
-            }
-          }
-          error.getMessages().add(String.format("Parameter '%s' is not of expected type", paramName));
-          break;
-  
-        case DATE:
-          if (value instanceof Date) {
-            break;
-          } // Convert Integer and Long to Date if possible.
-          if (value instanceof Integer || value instanceof Long) {
-            long epoch;
-            if (value instanceof Integer) {
-              epoch = ((Integer) value).longValue();
-            } else {
-              epoch = (Long) value;
-            }
-            claims.put(paramName, new Date(epoch));
-            break;
-          }
-          error.getMessages().add(String.format("Parameter '%s' is not of expected type", paramName));
-          break;
-  
-        case LIST:
-          if ((value instanceof List) && (((List) value).get(0) instanceof String)) {
-            break;
-          } // If there is String we set it to list
-          if (value instanceof String) {
-            List<String> listParam = new ArrayList<String>();
-            listParam.add((String) value);
-            claims.put(paramName, listParam);
-            break;
-          }
-          error.getMessages().add(String.format("Parameter '%s' is not of expected type", paramName));
-          break;
-  
-        case ARRAY:
-          if (value instanceof String) {
-            break;
-          }
-          if (!(value instanceof String[]) || ((String[]) value).length == 0) {
-            error.getMessages().add(
-                String.format("The claim '%s' type is not appropriate for this claim'", paramName));
-            break;
-          }
-          String spaceSeparatedString = "";
-          for (String item : (String[]) value) {
-            spaceSeparatedString += spaceSeparatedString.length() > 0 ? " " + item : item;
-          }
-          claims.put(paramName, spaceSeparatedString);
-          break;
-  
-        case ID_TOKEN:
-          if (!(value instanceof IDToken)) {
-            error.getMessages().add(
-                String.format("The claim '%s' type is not appropriate for this claim'", paramName));
-            break;
-          }
-          verified = ((IDToken) value).verify();
-          return ((IDToken) value).verify();
-  
-        default:
-          break;
+      try {
+        Object transformed = paramVerDefs.get(paramName).getClaimValidator().validate(value);
+        claims.put(paramName, transformed);
+      } catch (InvalidClaimException e) {
+        error.getMessages()
+          .add(String.format("Parameter '%s' is not of expected type", paramName));        
       }
-
+    }
+    for (String paramName : allowedValues.keySet()) {
+      if (claims.containsKey(paramName)) {
+        Object value = claims.get(paramName);
+        List<?> allowed = allowedValues.get(paramName);
+        boolean checked = true;
+        if (allowed.isEmpty()) {
+          checked = false;
+        }
+        if (value instanceof String) {
+          if (!(allowed.get(0) instanceof String) || !allowed.contains(value)) {
+            checked = false;
+          }
+        } else if (value instanceof Long) {
+          if (!(allowed.get(0) instanceof Long) || !allowed.contains(value)) {
+            checked = false;
+          }          
+        } else if (value instanceof List) {
+          for (Object item : (List<?>)value) {
+            if (!allowed.contains(item)) {
+              checked = false;
+            }
+          }
+          // Should we support more value types?
+        } else {
+          checked = false;
+        }
+        if (!checked) {
+          error.getMessages()
+            .add(String.format("Parameter '%s' does not have expected value", paramName));
+        }
+      }
     }
     if (error.getMessages().size() > 0) {
       throw new InvalidClaimException(
