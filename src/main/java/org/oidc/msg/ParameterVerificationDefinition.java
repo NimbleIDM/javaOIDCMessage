@@ -1,5 +1,7 @@
 package org.oidc.msg;
 
+import org.oidc.msg.validator.ClaimValidator;
+
 /**
  * Class implementing definition on how request/response parameter existence should be verified.
  */
@@ -7,19 +9,19 @@ public class ParameterVerificationDefinition {
 
   /** Whether the parameter is required or not. */
   private boolean required = true;
-  /** Type of the parameter. */
-  private ClaimType parameterType;
+  /** Claim validator used to validate the structure of the parameter value. */
+  private ClaimValidator claimValidator;
 
   /**
    * Constructor.
    * 
-   * @param parameterType
-   *          type of the parameter
+   * @param validator
+   *          claim validator used to validate the structure of the parameter value
    * @param required
    *          whether the parameter is required or not
    */
-  public ParameterVerificationDefinition(ClaimType parameterType, boolean required) {
-    this.parameterType = parameterType;
+  public ParameterVerificationDefinition(ClaimValidator validator, boolean required) {
+    this.claimValidator = validator;
     this.required = required;
 
   }
@@ -32,14 +34,14 @@ public class ParameterVerificationDefinition {
   public boolean isRequired() {
     return required;
   }
-
+ 
   /**
-   * Get type of the parameter.
+   * Get the claim validator used to validate the structure of the parameter value.
    * 
-   * @return type of the parameter.
+   * @return Claim validator used to validate the structure of the parameter value
    */
-  public ClaimType getParameterType() {
-    return parameterType;
+  public ClaimValidator getClaimValidator() {
+    return claimValidator;
   }
-
+  
 }
