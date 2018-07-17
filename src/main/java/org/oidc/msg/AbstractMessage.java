@@ -76,9 +76,6 @@ public abstract class AbstractMessage implements Message {
    */
   public String toUrlEncoded()
       throws SerializationException, JsonProcessingException, InvalidClaimException {
-    if (!verified) {
-      verify();
-    }
     String jsonMsg = mapper.writeValueAsString(this.claims);
     String urlEncodedMsg = Base64
         .encodeBase64URLSafeString(jsonMsg.getBytes(StandardCharsets.UTF_8));
@@ -112,9 +109,6 @@ public abstract class AbstractMessage implements Message {
    *           thrown if message parameters do not match the message requirements.
    */
   public String toJson() throws JsonProcessingException, InvalidClaimException {
-    if (!verified) {
-      verify();
-    }
     SimpleModule module = new SimpleModule();
     module.addSerializer(AbstractMessage.class, new MessageSerializer());
     mapper.registerModule(module);
@@ -157,9 +151,6 @@ public abstract class AbstractMessage implements Message {
    */
   public String toJwt(Algorithm algorithm)
       throws JsonProcessingException, SerializationException, InvalidClaimException {
-    if (!verified) {
-      verify();
-    }
     header.put("alg", algorithm.getName());
     header.put("typ", "JWT");
     String signingKeyId = algorithm.getSigningKeyId();
@@ -202,7 +193,7 @@ public abstract class AbstractMessage implements Message {
    * @throws InvalidClaimException
    *           if verification fails.
    */
-  protected boolean verify() throws InvalidClaimException {
+  public boolean verify() throws InvalidClaimException {
     error.getMessages().clear();
 
     Map<String, ParameterVerificationDefinition> paramVerDefs = 
@@ -284,9 +275,6 @@ public abstract class AbstractMessage implements Message {
    * @return List of the list of claims for this message
    */
   public Map<String, Object> getClaims() throws InvalidClaimException {
-    if (!verified) {
-      verify();
-    }
     return this.claims;
   }
 
@@ -319,6 +307,15 @@ public abstract class AbstractMessage implements Message {
    */
   public boolean hasError() {
     return error.getMessages() != null;
+  }
+  
+  /**
+   * Whether the claims have been verified after last change.
+   * 
+   * @return true if verified, false otherwise.
+   */
+  public boolean isVerified() {
+    return verified;
   }
 
   /**
