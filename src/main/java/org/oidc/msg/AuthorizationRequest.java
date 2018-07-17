@@ -1,6 +1,5 @@
 package org.oidc.msg;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
