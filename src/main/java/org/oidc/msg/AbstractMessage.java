@@ -317,6 +317,17 @@ public abstract class AbstractMessage implements Message {
   public boolean isVerified() {
     return verified;
   }
+  
+  /**
+   * Extending classes to set status.
+   * 
+   * @param verified
+   *          false if the verification has failed in the extending class.
+   */
+  protected void setVerified(boolean verified) {
+    this.verified = verified;
+  }
+
 
   /**
    * {@inheritDoc}
