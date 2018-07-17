@@ -75,16 +75,20 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // TODO: what is the following ''Nonce in id_token not matching nonce in authz'
     
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
-    
     if (spaceSeparatedScopes == null
         || !Pattern.compile("\\bopenid\\b").matcher(spaceSeparatedScopes).find()) {
       getError().getMessages().add("Parameter scope must exist and contain value openid");
     }
     
-    List<String> prompt = ((List<String>) getClaims().get("prompt"));
+    String responseType = (String) getClaims().get("response_type");
+    if (Pattern.compile("\\bid_token\\b").matcher(responseType).find()
+        && (getClaims().get("nonce") == null || ((String) getClaims().get("nonce")).isEmpty())) {
+      getError().getMessages().add("Nonce is mandatory if response type contains id_token");
+    }
     
+    List<String> prompt = ((List<String>) getClaims().get("prompt"));
     if (prompt != null && prompt.contains("none") && prompt.size() > 1) {
-      getError().getMessages().add("prompt value none must not be used with other values");
+      getError().getMessages().add("Prompt value none must not be used with other values");
     }
     
     if (Pattern.compile("\\boffline_access\\b").matcher(spaceSeparatedScopes).find()) {

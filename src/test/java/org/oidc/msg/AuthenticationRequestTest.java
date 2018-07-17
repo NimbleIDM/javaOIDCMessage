@@ -51,6 +51,23 @@ public class AuthenticationRequestTest {
     Assert.assertEquals("consent", ((List<String>) req.getClaims().get("prompt")).get(0));
     Assert.assertEquals("openid offline_access", req.getClaims().get("scope"));
   }
+  
+  @Test
+  public void testSuccessResponseTypeIdToken() throws InvalidClaimException {
+    claims.put("response_type", "id_token token");
+    claims.put("nonce", "DFHGFG");
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+    Assert.assertEquals("DFHGFG", (String) req.getClaims().get("nonce"));
+    Assert.assertEquals("id_token token", req.getClaims().get("response_type"));
+  }
+  
+  @Test(expected = InvalidClaimException.class)
+  public void testFailResponseTypeIdTokenMissingNonce() throws InvalidClaimException {
+    claims.put("response_type", "id_token token");
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+  }
 
   @Test(expected = InvalidClaimException.class)
   public void testFailOfflineAccessNoConsent() throws InvalidClaimException {
