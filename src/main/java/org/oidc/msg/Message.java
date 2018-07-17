@@ -72,6 +72,24 @@ public interface Message {
    *          of the claim
    */
   void addClaim(String name, Object value);
+  
+  /**
+   * Verifies the presence of required message parameters. Verifies the the format of message
+   * parameters.
+   * 
+   * @return true if parameters are successfully verified.
+   * @throws InvalidClaimException
+   *           if verification fails.
+   */
+  public boolean verify() throws InvalidClaimException;
+  
+  /**
+   * Whether the message parameters have been verified after last change.
+   * 
+   * @return true if verified, false otherwise.
+   */
+  public boolean isVerified();
+  
 
   /**
    *
