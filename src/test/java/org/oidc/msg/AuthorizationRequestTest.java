@@ -19,6 +19,7 @@ public class AuthorizationRequestTest {
     claims.put("response_type", responseType);
     claims.put("client_id", "value");
     AuthorizationRequest req = new AuthorizationRequest(claims);
+    req.verify();
     Assert.assertEquals("id_token token", req.getClaims().get("response_type"));
     Assert.assertEquals("value", req.getClaims().get("client_id"));
   }
@@ -28,10 +29,9 @@ public class AuthorizationRequestTest {
     Map<String, Object> claims = new HashMap<String, Object>();
     claims.put("client_id", "value");
     AuthorizationRequest req = new AuthorizationRequest(claims);
-    Assert.assertEquals("value", req.getClaims().get("client_id"));
+    req.verify();
   }
 
-  @SuppressWarnings("unchecked")
   @Test(expected = InvalidClaimException.class)
   public void testFailureMissingClientIdMandatoryParameter() throws InvalidClaimException {
     Map<String, Object> claims = new HashMap<String, Object>();
@@ -39,7 +39,7 @@ public class AuthorizationRequestTest {
     responseType.add("code");
     claims.put("response_type", responseType);
     AuthorizationRequest req = new AuthorizationRequest(claims);
-    Assert.assertEquals("code", ((List<String>) req.getClaims().get("response_type")).get(0));
+    req.verify();
   }
 
 }

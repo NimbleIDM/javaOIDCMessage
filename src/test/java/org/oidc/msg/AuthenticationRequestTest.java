@@ -15,6 +15,7 @@ public class AuthenticationRequestTest {
     claims.put("redirect_uri", "value");
     claims.put("scope", "openid");
     AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
     Assert.assertEquals("code", req.getClaims().get("response_type"));
     Assert.assertEquals("value", req.getClaims().get("client_id"));
     Assert.assertEquals("value", req.getClaims().get("redirect_uri"));
@@ -27,7 +28,7 @@ public class AuthenticationRequestTest {
     Map<String, Object> claims = new HashMap<String, Object>();
     claims.put("client_id", "value");
     AuthenticationRequest req = new AuthenticationRequest(claims);
-    Assert.assertEquals("value", req.getClaims().get("client_id"));
+    req.verify();
   }
 
 }

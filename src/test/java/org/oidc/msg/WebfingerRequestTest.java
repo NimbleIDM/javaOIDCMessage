@@ -17,6 +17,7 @@ public class WebfingerRequestTest {
     claims.put("resource", "value");
     WebfingerRequest req = new WebfingerRequest();
     req.addClaim("resource", "value");
+    req.verify();
     Map<String, Object> msgClaims = req.getClaims();
     Assert.assertEquals("value", msgClaims.get("resource"));
     Assert.assertEquals("http://openid.net/specs/connect/1.0/issuer", msgClaims.get("rel"));
@@ -28,6 +29,7 @@ public class WebfingerRequestTest {
     claims.put("resource", "value");
     claims.put("rel", "relValue");
     WebfingerRequest req = new WebfingerRequest(claims);
+    req.verify();
     Map<String, Object> msgClaims = req.getClaims();
     Assert.assertEquals("value", msgClaims.get("resource"));
     Assert.assertEquals("relValue", msgClaims.get("rel"));
@@ -38,7 +40,7 @@ public class WebfingerRequestTest {
     Map<String, Object> claims = new HashMap<String, Object>();
     claims.put("custom", "value");
     WebfingerRequest req = new WebfingerRequest(claims);
-    req.getClaims(); // triggers verify()
+    req.verify();
   }
 
 }
