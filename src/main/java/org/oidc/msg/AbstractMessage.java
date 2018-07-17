@@ -274,7 +274,7 @@ public abstract class AbstractMessage implements Message {
    * 
    * @return List of the list of claims for this message
    */
-  public Map<String, Object> getClaims() throws InvalidClaimException {
+  public Map<String, Object> getClaims() {
     return this.claims;
   }
 

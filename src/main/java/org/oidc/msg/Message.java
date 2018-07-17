@@ -92,11 +92,11 @@ public interface Message {
   
 
   /**
-   *
-   * @return Map of claims
-   * @throws InvalidClaimException
+   * Get the message parameters.
+   * 
+   * @return List of the list of claims for this message
    */
-  Map<String, Object> getClaims() throws InvalidClaimException;
+  Map<String, Object> getClaims();
 
   /**
    * @return the error object representing an error in verification
