@@ -1,5 +1,6 @@
 package org.oidc.msg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,30 @@ public class AuthenticationRequestTest {
   public void testFailureMissingResponseTypeMandatoryParameters() throws InvalidClaimException {
     Map<String, Object> claims = new HashMap<String, Object>();
     claims.remove("client_id");
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+  }
+
+  @Test(expected = InvalidClaimException.class)
+  public void testFailInvalidPromptCombination() throws InvalidClaimException {
+    List<String> prompt = new ArrayList<String>();
+    prompt.add("none");
+    prompt.add("consent");
+    claims.put("prompt", prompt);
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+  }
+
+  @Test(expected = InvalidClaimException.class)
+  public void testFailUnAllowedPromptValue() throws InvalidClaimException {
+    claims.put("prompt", "notlisted");
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+  }
+
+  @Test(expected = InvalidClaimException.class)
+  public void testFailUnAllowedDisplayValue() throws InvalidClaimException {
+    claims.put("display", "notlisted");
     AuthenticationRequest req = new AuthenticationRequest(claims);
     req.verify();
   }

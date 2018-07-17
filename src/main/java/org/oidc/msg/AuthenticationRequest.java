@@ -73,10 +73,7 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // Use IdToken, decode it from JWT. It should check the signature
     // TODO:if implicit flow (or also hybrid?), check for existence of nonce
     // TODO: what is the following ''Nonce in id_token not matching nonce in authz'
-    // TODO: Check that scope contains openid value -> exception
-    // TODO: If offline_access in scope, there must be "prompt=consent"
-    // TODO: Check that prompt none is not used with other values
-
+    
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
     
     if (spaceSeparatedScopes == null
@@ -84,8 +81,13 @@ public class AuthenticationRequest extends AuthorizationRequest {
       getError().getMessages().add("Parameter scope must exist and contain value openid");
     }
     
+    List<String> prompt = ((List<String>) getClaims().get("prompt"));
+    
+    if (prompt != null && prompt.contains("none") && prompt.size() > 1) {
+      getError().getMessages().add("prompt value none must not be used with other values");
+    }
+    
     if (Pattern.compile("\\boffline_access\\b").matcher(spaceSeparatedScopes).find()) {
-      List<String> prompt = ((List<String>) getClaims().get("prompt"));
       if (prompt == null || !prompt.contains("consent")) {
         getError().getMessages()
             .add("When offline_access scope is used prompt must have value consent");
