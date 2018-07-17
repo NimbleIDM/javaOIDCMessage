@@ -22,14 +22,9 @@ public class MessageSerializer extends StdSerializer<AbstractMessage> {
   public void serialize(AbstractMessage value, JsonGenerator gen, SerializerProvider provider)
       throws IOException {
     gen.writeStartObject();
-    try {
-      Map<String, Object> claims = value.getClaims();
-      for (Entry<String, Object> entry : claims.entrySet()) {
-        gen.writeObjectField(entry.getKey(), entry.getValue());
-      }
-    } catch (InvalidClaimException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    Map<String, Object> claims = value.getClaims();
+    for (Entry<String, Object> entry : claims.entrySet()) {
+      gen.writeObjectField(entry.getKey(), entry.getValue());
     }
     gen.writeEndObject();
 

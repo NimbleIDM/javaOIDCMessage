@@ -9,7 +9,7 @@ public class RegistrationResponse extends AbstractMessage {
   }
 
   @Override
-  public Map<String, Object> getClaims() throws InvalidClaimException {
+  public Map<String, Object> getClaims() {
     return null;
   }
 }
