@@ -29,6 +29,7 @@ public class JsonResponseDescriptorTest {
         "  }";
     JsonResponseDescriptor jrd = new JsonResponseDescriptor();
     jrd.fromJson(json);
+    jrd.verify();
     Map<String, Object> claims = jrd.getClaims();
     Assert.assertEquals("acct:juliet%40capulet.example@shopping.example.com", claims.get("subject"));
     List<Link> links = (List<Link>) claims.get("links");
@@ -50,6 +51,7 @@ public class JsonResponseDescriptorTest {
     links.add(link);
     claims.put("links", links);
     JsonResponseDescriptor jrd = new JsonResponseDescriptor(claims);
+    jrd.verify();
     Map<String, Object> parsedClaims = jrd.getClaims();
     Assert.assertEquals("acct:juliet%40capulet.example@shopping.example.com", parsedClaims.get("subject"));
     List<Link> parsedLinks = (List<Link>) parsedClaims.get("links");
