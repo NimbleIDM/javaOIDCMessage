@@ -71,8 +71,7 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // Check that fields match -> ValueError
     // TODO:Verify "id_token_hint" if it exists..
     // Use IdToken, decode it from JWT. It should check the signature
-    // TODO:if implicit flow (or also hybrid?), check for existence of nonce
-    // TODO: what is the following ''Nonce in id_token not matching nonce in authz'
+    // TODO: verify from Rolands code the case ''Nonce in id_token not matching nonce in authz'
     
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
     if (spaceSeparatedScopes == null
