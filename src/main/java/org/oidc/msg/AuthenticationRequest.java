@@ -1,8 +1,8 @@
 package org.oidc.msg;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -63,6 +63,7 @@ public class AuthenticationRequest extends AuthorizationRequest {
    * @throws InvalidClaimException
    *           if verification fails.
    */
+  @SuppressWarnings("unchecked")
   public boolean verify() throws InvalidClaimException {
     super.verify();
     // TODO:Verify "request" is formed correctly if it exists..
@@ -77,10 +78,18 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // TODO: Check that prompt none is not used with other values
 
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
-
+    
     if (spaceSeparatedScopes == null
         || !Pattern.compile("\\bopenid\\b").matcher(spaceSeparatedScopes).find()) {
       getError().getMessages().add("Parameter scope must exist and contain value openid");
+    }
+    
+    if (Pattern.compile("\\boffline_access\\b").matcher(spaceSeparatedScopes).find()) {
+      List<String> prompt = ((List<String>) getClaims().get("prompt"));
+      if (prompt == null || !prompt.contains("consent")) {
+        getError().getMessages()
+            .add("When offline_access scope is used prompt must have value consent");
+      }
     }
 
     if (getError().getMessages().size() > 0) {
