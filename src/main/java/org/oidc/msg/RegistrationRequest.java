@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationRequest extends AbstractMessage {
+  
+  public static final String DEFAULT_ENC_VALUE = "A128CBC-HS256";
 
   { // Set parameter requirements for message.
     paramVerDefs.put("redirect_uris", ParameterVerification.REQUIRED_LIST_OF_STRINGS.getValue());
@@ -92,7 +94,7 @@ public class RegistrationRequest extends AbstractMessage {
       String encParam = prefix + "_enc";
       if (getClaims().containsKey(algParam)) {
         if (!getClaims().containsKey(encParam)) {
-          addClaim(encParam, "A128CBC-HS256");
+          addClaim(encParam, DEFAULT_ENC_VALUE);
         }
       }
       if (getClaims().containsKey(encParam) && !getClaims().containsKey(algParam)) {
