@@ -27,12 +27,12 @@ public abstract class AbstractMessage implements Message {
   private Map<String, Object> claims;
   /** Header when message is jwt like signed userinfo response. */
   private Map<String, Object> header;
-  /** Error if such has happened during message verification. */
-  private Error error = new Error();
   /** Json (de)serialization. */
   private ObjectMapper mapper = new ObjectMapper();
   /** Whether the message has been verified. */
   private boolean verified;
+  /** Error if such has happened during message verification. */
+  protected Error error = new Error();
   /** Parameter requirements. */
   protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
       new HashMap<String, ParameterVerificationDefinition>();
