@@ -19,10 +19,20 @@ public class AuthenticationRequestTest {
     Assert.assertEquals("code", req.getClaims().get("response_type"));
     Assert.assertEquals("value", req.getClaims().get("client_id"));
     Assert.assertEquals("value", req.getClaims().get("redirect_uri"));
-    Assert.assertEquals("openid",req.getClaims().get("scope"));
+    Assert.assertEquals("openid", req.getClaims().get("scope"));
   }
 
-  
+  @Test(expected = InvalidClaimException.class)
+  public void testFailMissingOpenidScopeParameter() throws InvalidClaimException {
+    Map<String, Object> claims = new HashMap<String, Object>();
+    claims.put("response_type", "code");
+    claims.put("client_id", "value");
+    claims.put("redirect_uri", "value");
+    claims.put("scope", "profile");
+    AuthenticationRequest req = new AuthenticationRequest(claims);
+    req.verify();
+  }
+
   @Test(expected = InvalidClaimException.class)
   public void testFailureMissingResponseTypeMandatoryParameters() throws InvalidClaimException {
     Map<String, Object> claims = new HashMap<String, Object>();
