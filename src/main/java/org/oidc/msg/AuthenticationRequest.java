@@ -31,9 +31,17 @@ public class AuthenticationRequest extends AuthorizationRequest {
     paramVerDefs.put("request", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
     paramVerDefs.put("request_uri", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
     paramVerDefs.put("response_mode", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    // TODO: Roland has SINGLE_OPTIONAL_CLAIMSREQ. Do we get by with MESSAGE?
-    paramVerDefs.put("claims", ParameterVerification.SINGLE_OPTIONAL_MESSAGE.getValue());
-
+    
+    // TODO: TASK1 
+    // Roland has SINGLE_OPTIONAL_CLAIMSREQ. 
+    /*
+    class ClaimsRequest(Message):
+      c_param = {
+          "userinfo": OPTIONAL_MULTIPLE_Claims,
+          "id_token": OPTIONAL_MULTIPLE_Claims
+      }
+    */
+    //paramVerDefs.put("claims", ParameterVerification.SINGLE_OPTIONAL_CLAIMSREQ.getValue());
     // TODO: Roland has this "registration" parameter, what is it?
     // paramVerDefs.put("registration", ParameterVerification.SINGLE_OPTIONAL_JSON.getValue());
 
@@ -66,12 +74,17 @@ public class AuthenticationRequest extends AuthorizationRequest {
   @SuppressWarnings("unchecked")
   public boolean verify() throws InvalidClaimException {
     super.verify();
-    // TODO:Verify "request" is formed correctly if it exists..
+    
+    // TODO: TASK2 
+    // Verify "request" is formed correctly if it exists..
     // Create OpenIDRequest message class, decode it from JWT. It should check the signature
     // Check that fields match -> ValueError
-    // TODO:Verify "id_token_hint" if it exists..
+    
+    // TODO: TASK3
+    // Verify "id_token_hint" if it exists..
     // Use IdToken, decode it from JWT. It should check the signature
-    // TODO: verify from Rolands code the case ''Nonce in id_token not matching nonce in authz'
+    
+    // TODO: verify from Rolands code the case ''Nonce in id_token not matching nonce in authz'..what is a
     
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
     if (spaceSeparatedScopes == null
