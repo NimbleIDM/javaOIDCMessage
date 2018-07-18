@@ -1,9 +1,12 @@
 package org.oidc.msg;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.oidc.msg.oidc.IDToken;
 
 /**
  * Authentication request message as described in
@@ -80,11 +83,25 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // Create OpenIDRequest message class, decode it from JWT. It should check the signature
     // Check that fields match -> ValueError
     
-    // TODO: TASK3
-    // Verify "id_token_hint" if it exists..
-    // Use IdToken, decode it from JWT. It should check the signature
+    // TODO: verify from Rolands code the case ''Nonce in id_token not matching nonce in authz'
     
-    // TODO: verify from Rolands code the case ''Nonce in id_token not matching nonce in authz'..what is a
+    String idTokenHint = ((String) getClaims().get("id_token_hint"));
+    if (idTokenHint != null) {
+      IDToken idToken = new IDToken();
+      try {
+        idToken.fromJwt(idTokenHint);
+      } catch (IOException e) {
+        getError().getMessages()
+            .add(String.format("Unable to from id token from '%s'", idTokenHint));
+      }
+      try {
+        idToken.verify();
+      } catch (InvalidClaimException e) {
+        for (String errorDesc : idToken.getError().getMessages()) {
+          getError().getMessages().add(String.format("id_token_hint failed: '%s'", errorDesc));
+        }
+      }
+    }
     
     String spaceSeparatedScopes = ((String) getClaims().get("scope"));
     if (spaceSeparatedScopes == null
