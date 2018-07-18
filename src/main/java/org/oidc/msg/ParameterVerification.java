@@ -26,8 +26,7 @@ public enum ParameterVerification {
   REQUIRED_LIST_OF_STRINGS(new ParameterVerificationDefinition(new ListClaimValidator(), true)),
   OPTIONAL_LIST_OF_STRINGS(new ParameterVerificationDefinition(new ListClaimValidator(),false)),
   REQUIRED_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(new ArrayClaimValidator(), true)),
-  OPTIONAL_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(
-      new ArrayClaimValidator(), false)),
+  OPTIONAL_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(new ArrayClaimValidator(), false)),
   SINGLE_REQUIRED_MESSAGE(new ParameterVerificationDefinition(new MessageClaimValidator(), true)), 
   SINGLE_OPTIONAL_MESSAGE(new ParameterVerificationDefinition(new MessageClaimValidator(), false));
   
