@@ -31,9 +31,9 @@ public class AuthenticationRequest extends AuthorizationRequest {
     paramVerDefs.put("request", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
     paramVerDefs.put("request_uri", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
     paramVerDefs.put("response_mode", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    // TODO: Roland has SINGLE_OPTIONAL_CLAIMSREQ. Do we get by with MESSAGE?
+    paramVerDefs.put("claims", ParameterVerification.SINGLE_OPTIONAL_MESSAGE.getValue());
 
-    // TODO: "claims"
-    // paramVerDefs.put("claims", ParameterVerification.SINGLE_OPTIONAL_CLAIMSREQ.getValue());
     // TODO: Roland has this "registration" parameter, what is it?
     // paramVerDefs.put("registration", ParameterVerification.SINGLE_OPTIONAL_JSON.getValue());
 
