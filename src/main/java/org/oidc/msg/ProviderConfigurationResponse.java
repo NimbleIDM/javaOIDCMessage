@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ProviderConfigurationResponse extends org.oidc.msg.oauth2.ASConfigurationResponse {
 
@@ -125,7 +126,7 @@ public class ProviderConfigurationResponse extends org.oidc.msg.oauth2.ASConfigu
     @SuppressWarnings("unchecked")
     List<String> rts = (List<String>) getClaims().get("response_types_supported");
     for (String rt : rts) {
-      if (rt.contains("code")) {
+      if (Pattern.compile("\\bcode\\b").matcher(rt).find()) {
         if (!getClaims().containsKey("token_endpoint")) {
           error.getMessages().add("'token_endpoint' is required when code response_type is supported");
         }
