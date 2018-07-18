@@ -7,6 +7,7 @@ import org.oidc.msg.validator.IntClaimValidator;
 import org.oidc.msg.validator.ListClaimValidator;
 import org.oidc.msg.validator.MapClaimValidator;
 import org.oidc.msg.validator.StringClaimValidator;
+import org.oidc.msg.validator.MessageClaimValidator;
 
 /** Enum for expressing parameter verification definitions. */
 public enum ParameterVerification {
@@ -25,7 +26,11 @@ public enum ParameterVerification {
   REQUIRED_LIST_OF_STRINGS(new ParameterVerificationDefinition(new ListClaimValidator(), true)),
   OPTIONAL_LIST_OF_STRINGS(new ParameterVerificationDefinition(new ListClaimValidator(),false)),
   REQUIRED_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(new ArrayClaimValidator(), true)),
-  OPTIONAL_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(new ArrayClaimValidator(), false));
+  OPTIONAL_LIST_OF_SP_SEP_STRINGS(new ParameterVerificationDefinition(
+      new ArrayClaimValidator(), false)),
+  SINGLE_REQUIRED_MESSAGE(new ParameterVerificationDefinition(new MessageClaimValidator(), true)), 
+  SINGLE_OPTIONAL_MESSAGE(new ParameterVerificationDefinition(new MessageClaimValidator(), false));
+  
  
   /** Verification definition. */
   private ParameterVerificationDefinition parameterVerificationDefinition;

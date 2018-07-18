@@ -390,6 +390,57 @@ public class AbstractMessageTest {
     MockMessage mockMessage = new MockMessage(claims, parVerDef);
     mockMessage.verify();
   }
+  
+  @Test
+  public void successTestMessageType() throws InvalidClaimException {
+    HashMap<String, Object> innerClaims = new HashMap<>();
+    innerClaims.put("parameter1", "value");
+    Map<String, ParameterVerificationDefinition> innerParVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    innerParVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    MockMessage innerMockMessage = new MockMessage(innerClaims, innerParVerDef);
+    
+    HashMap<String, Object> claims = new HashMap<>();
+    claims.put("parameter1", innerMockMessage);
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_MESSAGE.getValue());
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
+    mockMessage.verify();
+    Assert.assertEquals(((Message)(mockMessage.getClaims().
+        get("parameter1"))).getClaims().get("parameter1") ,"value");
+  }
+  
+  @Test(expected = InvalidClaimException.class)
+  public void failTestMessageTypeInnerFails() throws InvalidClaimException {
+    HashMap<String, Object> innerClaims = new HashMap<>();
+    innerClaims.put("parameter1", 5);
+    Map<String, ParameterVerificationDefinition> innerParVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    innerParVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    MockMessage innerMockMessage = new MockMessage(innerClaims, innerParVerDef);
+    
+    HashMap<String, Object> claims = new HashMap<>();
+    claims.put("parameter1", innerMockMessage);
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+        new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_MESSAGE.getValue());
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
+    mockMessage.verify();
+    Assert.assertEquals(((Message)(mockMessage.getClaims().
+        get("parameter1"))).getClaims().get("parameter1") ,"value");
+  }
+  
+  @Test(expected = InvalidClaimException.class)
+  public void failTestMessageType() throws InvalidClaimException {
+    HashMap<String, Object> claims = new HashMap<>();
+    claims.put("parameter1", "value");
+    Map<String, ParameterVerificationDefinition> parVerDef = 
+         new HashMap<String, ParameterVerificationDefinition>();
+    parVerDef.put("parameter1", ParameterVerification.SINGLE_OPTIONAL_MESSAGE.getValue());
+    MockMessage mockMessage = new MockMessage(claims, parVerDef);
+    mockMessage.verify();
+  }
 
   class MockMessage extends AbstractMessage {
     
