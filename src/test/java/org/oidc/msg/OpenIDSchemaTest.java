@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.oidc.msg;
 
 import java.util.ArrayList;
@@ -35,7 +51,7 @@ public class OpenIDSchemaTest {
     OpenIDSchema req = new OpenIDSchema(claims);
     req.verify();
   }
-  
+
   @Test
   public void testSuccessDateFormats() throws InvalidClaimException {
     OpenIDSchema req = new OpenIDSchema(claims);
@@ -46,19 +62,19 @@ public class OpenIDSchemaTest {
     claims.put("birthdate", "1990");
     req.verify();
   }
-  
+
   @Test(expected = InvalidClaimException.class)
   public void testFailDateFormats() throws InvalidClaimException {
     OpenIDSchema req = new OpenIDSchema(claims);
     claims.put("birthdate", "X-1555-15");
     req.verify();
   }
-  
+
   @Test(expected = InvalidClaimException.class)
   public void testFailNullValue() throws InvalidClaimException {
     OpenIDSchema req = new OpenIDSchema(claims);
     claims.put("any", null);
     req.verify();
   }
-  
+
 }

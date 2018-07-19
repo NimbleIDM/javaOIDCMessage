@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.oidc.msg;
 
 import java.net.URI;
@@ -116,7 +132,7 @@ public class ProviderConfigurationResponse extends org.oidc.msg.oauth2.ASConfigu
       }
     }
     try {
-      URI uri = new URI((String)getClaims().get("issuer"));
+      URI uri = new URI((String) getClaims().get("issuer"));
       if (!"https".equals(uri.getScheme()) || uri.getQuery() != null || uri.getFragment() != null) {
         error.getMessages().add("Parameter 'issuer' has an invalid value");
       }
@@ -128,7 +144,8 @@ public class ProviderConfigurationResponse extends org.oidc.msg.oauth2.ASConfigu
     for (String rt : rts) {
       if (Pattern.compile("\\bcode\\b").matcher(rt).find()) {
         if (!getClaims().containsKey("token_endpoint")) {
-          error.getMessages().add("'token_endpoint' is required when code response_type is supported");
+          error.getMessages()
+              .add("'token_endpoint' is required when code response_type is supported");
         }
       }
     }

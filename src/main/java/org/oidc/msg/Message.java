@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.oidc.msg;
 
 import com.auth0.jwt.algorithms.Algorithm;
@@ -26,7 +42,8 @@ public interface Message {
    * @return a urlEncoded string
    * @throws SerializationException
    */
-  String toUrlEncoded() throws SerializationException, JsonProcessingException, InvalidClaimException;
+  String toUrlEncoded()
+      throws SerializationException, JsonProcessingException, InvalidClaimException;
 
   /**
    * Serialize the content of this instance (the claims map) into a jwt string
@@ -38,7 +55,8 @@ public interface Message {
    * @return a jwt String
    * @throws InvalidClaimException
    */
-  String toJwt(Algorithm algorithm) throws SerializationException, JsonProcessingException, InvalidClaimException;
+  String toJwt(Algorithm algorithm)
+      throws SerializationException, JsonProcessingException, InvalidClaimException;
 
   /**
    * Logic to extract from the string the values
@@ -72,7 +90,7 @@ public interface Message {
    *          of the claim
    */
   void addClaim(String name, Object value);
-  
+
   /**
    * Verifies the presence of required message parameters. Verifies the the format of message
    * parameters.
@@ -82,14 +100,13 @@ public interface Message {
    *           if verification fails.
    */
   public boolean verify() throws InvalidClaimException;
-  
+
   /**
    * Whether the message parameters have been verified after last change.
    * 
    * @return true if verified, false otherwise.
    */
   public boolean isVerified();
-  
 
   /**
    * Get the message parameters.

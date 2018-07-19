@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.oidc.msg;
 
 import java.util.Arrays;
@@ -6,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationRequest extends AbstractMessage {
-  
+
   public static final String DEFAULT_ENC_VALUE = "A128CBC-HS256";
 
   { // Set parameter requirements for message.
@@ -101,7 +117,7 @@ public class RegistrationRequest extends AbstractMessage {
         error.getMessages().add("Required parameter '" + algParam + "' is missing");
       }
     }
-    
+
     if (getClaims().containsKey("token_endpoint_auth_signing_alg")) {
       if ("none".equalsIgnoreCase((String) getClaims().get("token_endpoint_auth_signing_alg"))) {
         error.getMessages().add("'none' is not allowed for 'token_endpoint_auth_signing_alg'");

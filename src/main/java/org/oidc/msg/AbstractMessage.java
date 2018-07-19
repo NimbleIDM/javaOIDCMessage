@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.oidc.msg;
 
 import com.auth0.jwt.JWT;
@@ -34,8 +50,7 @@ public abstract class AbstractMessage implements Message {
   /** Error if such has happened during message verification. */
   protected Error error = new Error();
   /** Parameter requirements. */
-  protected final Map<String, ParameterVerificationDefinition> paramVerDefs = 
-      new HashMap<String, ParameterVerificationDefinition>();
+  protected final Map<String, ParameterVerificationDefinition> paramVerDefs = new HashMap<String, ParameterVerificationDefinition>();
   /** Default values for desired parameters. */
   protected final Map<String, Object> defaultValues = new HashMap<String, Object>();
   /** Allowed values for desired parameters. */
@@ -173,7 +188,7 @@ public abstract class AbstractMessage implements Message {
     }
     return newBuilder.sign(algorithm);
   }
-  
+
   /**
    * Adds default values to the claims which are not yet set.
    */
@@ -196,8 +211,7 @@ public abstract class AbstractMessage implements Message {
   public boolean verify() throws InvalidClaimException {
     error.getMessages().clear();
 
-    Map<String, ParameterVerificationDefinition> paramVerDefs = 
-        getParameterVerificationDefinitions();
+    Map<String, ParameterVerificationDefinition> paramVerDefs = getParameterVerificationDefinitions();
     if (paramVerDefs == null || paramVerDefs.isEmpty()) {
       verified = true;
       return true;
@@ -217,8 +231,7 @@ public abstract class AbstractMessage implements Message {
         Object transformed = paramVerDefs.get(paramName).getClaimValidator().validate(value);
         claims.put(paramName, transformed);
       } catch (InvalidClaimException e) {
-        error.getMessages()
-          .add(String.format("Parameter '%s' is not of expected type", paramName));        
+        error.getMessages().add(String.format("Parameter '%s' is not of expected type", paramName));
       }
     }
     for (String paramName : allowedValues.keySet()) {
@@ -236,9 +249,9 @@ public abstract class AbstractMessage implements Message {
         } else if (value instanceof Long) {
           if (!(allowed.get(0) instanceof Long) || !allowed.contains(value)) {
             checked = false;
-          }          
+          }
         } else if (value instanceof List) {
-          for (Object item : (List<?>)value) {
+          for (Object item : (List<?>) value) {
             if (!allowed.contains(item)) {
               checked = false;
             }
@@ -249,7 +262,7 @@ public abstract class AbstractMessage implements Message {
         }
         if (!checked) {
           error.getMessages()
-            .add(String.format("Parameter '%s' does not have expected value", paramName));
+              .add(String.format("Parameter '%s' does not have expected value", paramName));
         }
       }
     }
@@ -263,6 +276,7 @@ public abstract class AbstractMessage implements Message {
 
   /**
    * Get error description of message parameter verification.
+   * 
    * @return Error an object representing the error status of message parameter verification.
    */
   public Error getError() {
@@ -308,7 +322,7 @@ public abstract class AbstractMessage implements Message {
   public boolean hasError() {
     return error.getMessages() != null;
   }
-  
+
   /**
    * Whether the claims have been verified after last change.
    * 
@@ -317,7 +331,7 @@ public abstract class AbstractMessage implements Message {
   public boolean isVerified() {
     return verified;
   }
-  
+
   /**
    * Extending classes to set status.
    * 
@@ -327,7 +341,6 @@ public abstract class AbstractMessage implements Message {
   protected void setVerified(boolean verified) {
     this.verified = verified;
   }
-
 
   /**
    * {@inheritDoc}
