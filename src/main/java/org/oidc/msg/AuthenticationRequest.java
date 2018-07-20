@@ -105,7 +105,7 @@ public class AuthenticationRequest extends AuthorizationRequest {
         idToken.fromJwt(idTokenHint);
       } catch (IOException e) {
         getError().getMessages()
-            .add(String.format("Unable to from id token from '%s'", idTokenHint));
+            .add(String.format("Unable to parse id token from '%s'", idTokenHint));
       }
       try {
         idToken.verify();
