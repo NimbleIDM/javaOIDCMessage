@@ -141,6 +141,9 @@ public abstract class AbstractMessage implements Message {
    */
   @SuppressWarnings("unchecked")
   public void fromJwt(String input) throws IOException {
+    //TODO: This method should verify possible signature and decrypt if jwt is encrypted.
+    //Requires keyjar.
+    
     String[] parts = MessageUtil.splitToken(input);
     String headerJson;
     String payloadJson;
