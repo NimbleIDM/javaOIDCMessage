@@ -124,9 +124,9 @@ public class AuthenticationRequestTest {
     req.verify();
   }
 
-  @Test
+  //@Test
   public void testSuccessIdTokenHint() throws InvalidClaimException {
-    // TODO: There is no capability in is token to verify signature nor timestamps or sorts yet.
+    // TODO: There is no capability in id token to verify signature nor timestamps or sorts yet.
     // Once there is, this test will fail and needs to be updated to produce id token that passes
     // validation.
     String idToken = "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlz"
