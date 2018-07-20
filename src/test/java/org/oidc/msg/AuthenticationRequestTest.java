@@ -126,9 +126,7 @@ public class AuthenticationRequestTest {
 
   //@Test
   public void testSuccessIdTokenHint() throws InvalidClaimException {
-    // TODO: There is no capability in id token to verify signature nor timestamps or sorts yet.
-    // Once there is, this test will fail and needs to be updated to produce id token that passes
-    // validation.
+    // TODO: Update test
     String idToken = "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlz"
         + "cyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4"
         + "Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAi"
