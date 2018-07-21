@@ -124,4 +124,9 @@ public interface Message {
    * @return boolean for whether there is an error in verification
    */
   boolean hasError();
+  
+  /**
+   * @return Parameter requirements.
+   */
+  Map<String, ParameterVerificationDefinition> getParameterVerificationDefinitions();
 }
