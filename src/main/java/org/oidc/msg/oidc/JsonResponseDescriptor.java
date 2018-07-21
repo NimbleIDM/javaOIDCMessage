@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.oidc.msg.AbstractMessage;
+import org.oidc.msg.ParameterVerification;
+import org.oidc.msg.ParameterVerificationDefinition;
+import org.oidc.msg.validator.LinksClaimValidator;
+
 /**
- * One of the attributes of JSON Resource Description (JRD) Contains these attributes: rel, type,
- * href, titles, and properties For more info, please see:
- * https://tools.ietf.org/html/rfc7033#section-4.4.4
+ * JSON Resource Descriptor https://tools.ietf.org/html/rfc7033#section-4.4
  */
-public class Link extends AbstractMessage {
+public class JsonResponseDescriptor extends AbstractMessage {
 
   { // Set parameter requirements for message.
-    paramVerDefs.put("rel", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
-    paramVerDefs.put("type", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    paramVerDefs.put("href", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    paramVerDefs.put("titles", ParameterVerification.SINGLE_OPTIONAL_MAP.getValue());
+    paramVerDefs.put("subject", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    paramVerDefs.put("aliases", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
     paramVerDefs.put("properties", ParameterVerification.SINGLE_OPTIONAL_MAP.getValue());
+    paramVerDefs.put("links", new ParameterVerificationDefinition(new LinksClaimValidator(), true));
   }
 
-  public Link() {
+  public JsonResponseDescriptor() {
     this(new HashMap<String, Object>());
   }
 
-  public Link(Map<String, Object> claims) {
+  public JsonResponseDescriptor(Map<String, Object> claims) {
     super(claims);
   }
 }

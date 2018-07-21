@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.oidc.msg.validator.LinksClaimValidator;
+import org.oidc.msg.AbstractMessage;
+import org.oidc.msg.ParameterVerification;
 
-/**
- * JSON Resource Descriptor https://tools.ietf.org/html/rfc7033#section-4.4
- */
-public class JsonResponseDescriptor extends AbstractMessage {
+public class WebfingerRequest extends AbstractMessage {
 
   { // Set parameter requirements for message.
-    paramVerDefs.put("subject", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
-    paramVerDefs.put("aliases", ParameterVerification.OPTIONAL_LIST_OF_STRINGS.getValue());
-    paramVerDefs.put("properties", ParameterVerification.SINGLE_OPTIONAL_MAP.getValue());
-    paramVerDefs.put("links", new ParameterVerificationDefinition(new LinksClaimValidator(), true));
+    paramVerDefs.put("resource", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
+    paramVerDefs.put("rel", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
+    defaultValues.put("rel", "http://openid.net/specs/connect/1.0/issuer");
   }
 
-  public JsonResponseDescriptor() {
+  public WebfingerRequest() {
     this(new HashMap<String, Object>());
   }
 
-  public JsonResponseDescriptor(Map<String, Object> claims) {
+  public WebfingerRequest(Map<String, Object> claims) {
     super(claims);
+    addDefaultValues();
   }
 }

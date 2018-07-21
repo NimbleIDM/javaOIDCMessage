@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.oidc.msg.InvalidClaimException;
-import org.oidc.msg.Link;
+import org.oidc.msg.oidc.Link;
 
 public class LinksClaimValidator implements ClaimValidator {
 

@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.oidc.msg.AbstractMessage;
+import org.oidc.msg.InvalidClaimException;
+import org.oidc.msg.ParameterVerification;
 
 public class RegistrationRequest extends AbstractMessage {
 

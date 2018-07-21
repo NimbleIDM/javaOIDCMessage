@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.oidc.msg.InvalidClaimException;
+import org.oidc.msg.ParameterVerification;
 
 public class ProviderConfigurationResponse extends org.oidc.msg.oauth2.ASConfigurationResponse {
 

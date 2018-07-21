@@ -14,25 +14,34 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class WebfingerRequest extends AbstractMessage {
+import org.oidc.msg.AbstractMessage;
+import org.oidc.msg.ParameterVerification;
+
+/**
+ * One of the attributes of JSON Resource Description (JRD) Contains these attributes: rel, type,
+ * href, titles, and properties For more info, please see:
+ * https://tools.ietf.org/html/rfc7033#section-4.4.4
+ */
+public class Link extends AbstractMessage {
 
   { // Set parameter requirements for message.
-    paramVerDefs.put("resource", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
     paramVerDefs.put("rel", ParameterVerification.SINGLE_REQUIRED_STRING.getValue());
-    defaultValues.put("rel", "http://openid.net/specs/connect/1.0/issuer");
+    paramVerDefs.put("type", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    paramVerDefs.put("href", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
+    paramVerDefs.put("titles", ParameterVerification.SINGLE_OPTIONAL_MAP.getValue());
+    paramVerDefs.put("properties", ParameterVerification.SINGLE_OPTIONAL_MAP.getValue());
   }
 
-  public WebfingerRequest() {
+  public Link() {
     this(new HashMap<String, Object>());
   }
 
-  public WebfingerRequest(Map<String, Object> claims) {
+  public Link(Map<String, Object> claims) {
     super(claims);
-    addDefaultValues();
   }
 }

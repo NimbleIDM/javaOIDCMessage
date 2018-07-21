@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.oidc.msg.InvalidClaimException;
+import org.oidc.msg.ParameterVerification;
 import org.oidc.msg.oauth2.ResponseMessage;
 
 public class RegistrationResponse extends ResponseMessage {

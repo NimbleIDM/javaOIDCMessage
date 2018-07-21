@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import org.junit.Test;
+import org.oidc.msg.InvalidClaimException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 

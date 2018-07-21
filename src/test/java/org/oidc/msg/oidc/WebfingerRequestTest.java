@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.oidc.msg.InvalidClaimException;
 
 /**
  * Unit tests for {@link WebfingerRequest}.

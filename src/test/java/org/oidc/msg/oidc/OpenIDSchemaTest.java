@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oidc;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.oidc.msg.oidc.OpenIDSchema;
+import org.oidc.msg.InvalidClaimException;
 
 public class OpenIDSchemaTest {
 
