@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package org.oidc.msg;
+package org.oidc.msg.oauth2;
 
 import java.util.Map;
+
+import org.oidc.msg.AbstractMessage;
+import org.oidc.msg.ParameterVerification;
 
 /**
  * Authorization Request message as described in https://tools.ietf.org/html/rfc6749 for

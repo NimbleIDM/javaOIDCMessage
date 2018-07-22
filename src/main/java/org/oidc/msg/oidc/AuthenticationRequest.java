@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.oidc.msg.AuthorizationRequest;
 import org.oidc.msg.InvalidClaimException;
 import org.oidc.msg.ParameterVerification;
+import org.oidc.msg.oauth2.AuthorizationRequest;
 
 /**
  * Authentication request message as described in
