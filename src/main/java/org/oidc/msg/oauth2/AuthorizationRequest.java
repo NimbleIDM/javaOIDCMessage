@@ -16,6 +16,7 @@
 
 package org.oidc.msg.oauth2;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.oidc.msg.AbstractMessage;
@@ -37,6 +38,13 @@ public class AuthorizationRequest extends AbstractMessage {
     paramVerDefs.put("state", ParameterVerification.SINGLE_OPTIONAL_STRING.getValue());
   }
 
+  /**
+   * Constructor.
+   */
+  public AuthorizationRequest() {
+    this(new HashMap<String, Object>());
+  }
+  
   /**
    * Constructor.
    * 

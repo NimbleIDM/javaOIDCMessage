@@ -18,6 +18,7 @@ package org.oidc.msg.oidc;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -66,6 +67,13 @@ public class AuthenticationRequest extends AuthorizationRequest {
     // Updating allowed values of parameters
     allowedValues.put("display", Arrays.asList("page", "popup", "touch", "wap"));
     allowedValues.put("prompt", Arrays.asList("none", "login", "consent", "select_account"));
+  }
+
+  /**
+   * Constructor.
+   */
+  public AuthenticationRequest() {
+    this(new HashMap<String, Object>());
   }
 
   /**
