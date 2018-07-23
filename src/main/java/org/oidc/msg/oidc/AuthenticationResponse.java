@@ -16,6 +16,7 @@
 
 package org.oidc.msg.oidc;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.oidc.msg.InvalidClaimException;
@@ -40,6 +41,13 @@ public class AuthenticationResponse extends AuthorizationResponse {
     paramVerDefs.put("id_token", ParameterVerification.SINGLE_OPTIONAL_IDTOKEN.getValue());
   }
 
+  /**
+   * Constructor.
+   */
+  public AuthenticationResponse() {
+    this(new HashMap<String, Object>());
+  }
+  
   /**
    * Constructor.
    * 

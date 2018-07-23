@@ -16,6 +16,7 @@
 
 package org.oidc.msg.oauth2;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.oidc.msg.InvalidClaimException;
@@ -42,6 +43,13 @@ public class AuthorizationResponse extends ResponseMessage {
   /** Client ID to match the response to. */
   private String clientId;
 
+  /**
+   * Constructor.
+   */
+  public AuthorizationResponse() {
+    this(new HashMap<String, Object>());
+  }
+  
   /**
    * Constructor.
    * 
