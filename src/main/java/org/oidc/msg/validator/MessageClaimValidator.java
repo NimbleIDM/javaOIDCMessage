@@ -28,11 +28,6 @@ public class MessageClaimValidator implements ClaimValidator {
       throw new InvalidClaimException(
           String.format("Parameter '%s' is not of expected type", value));
     }
-    // TODO: This might not be correct phase to do verify as we might not be able to set all input
-    // for verify
-    if (!((Message) value).verify()) {
-      throw new InvalidClaimException(String.format("Parameter '%s' verification failed", value));
-    }
     return value;
   }
 }

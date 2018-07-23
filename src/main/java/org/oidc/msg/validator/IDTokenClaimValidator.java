@@ -17,7 +17,6 @@
 package org.oidc.msg.validator;
 
 import org.oidc.msg.InvalidClaimException;
-import org.oidc.msg.Message;
 import org.oidc.msg.oidc.IDToken;
 
 /** General validator for claims type of id token. */
@@ -28,11 +27,6 @@ public class IDTokenClaimValidator implements ClaimValidator {
     if (!(value instanceof IDToken)) {
       throw new InvalidClaimException(
           String.format("Parameter '%s' is not of expected type", value));
-    }
-    // TODO: This might not be correct phase to do verify as we might not be able to set all input
-    // for verify
-    if (!((IDToken) value).verify()) {
-      throw new InvalidClaimException(String.format("Parameter '%s' verification failed", value));
     }
     return value;
   }
